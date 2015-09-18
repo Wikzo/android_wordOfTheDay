@@ -132,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         // updating row
         return db.update(TABLE_WORDS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(w.getId()) });
+                new String[]{String.valueOf(w.getId())});
     }
 
     // Deleting single contact
@@ -140,7 +140,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WORDS, KEY_ID + " = ?",
-                new String[] { String.valueOf(w.getId()) });
+                new String[]{String.valueOf(w.getId())});
         db.close();
+
+    }
+
+    public void deleteAllWords()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_WORDS, null, null);
+        db.close();
+
     }
 }

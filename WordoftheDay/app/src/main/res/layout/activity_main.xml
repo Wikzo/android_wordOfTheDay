@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="[The new word]"
-        android:id="@+id/newWord"
+        android:id="@+id/currentWord"
         android:fontFamily="sans-serif-medium"
         android:textSize="36sp"
         android:textColor="#0060db"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="[Word&apos;s meaning]"
-        android:id="@+id/wordMeaning"
+        android:id="@+id/currentMeaning"
         android:layout_marginTop="69dp"
         android:layout_centerHorizontal="true"/>
 
@@ -38,5 +38,48 @@
         android:id="@+id/nextWord"
         android:onClick="ChangeWord"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear database"
+        android:id="@+id/clearDatabase"
+        android:onClick="ClearDatabase"
+        android:layout_above="@+id/nextWord"
+        android:layout_alignRight="@+id/nextWord"
+        android:layout_alignEnd="@+id/nextWord"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newWord"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/clearDatabase"
+        android:layout_alignStart="@+id/clearDatabase"
+        android:layout_alignRight="@+id/nextWord"
+        android:layout_alignEnd="@+id/nextWord"
+        android:hint="Write new word"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newMeaning"
+        android:layout_below="@+id/newWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Write new word"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/addNewWordButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="InsertNewWord"/>
 </RelativeLayout>

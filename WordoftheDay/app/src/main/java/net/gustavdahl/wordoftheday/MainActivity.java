@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     int count = 0;
-    TextView quoteText;
-    TextView personText;
-    ArrayList<Word> WordList;
+    TextView currentWord;
+    TextView currentMeaning;
+
+    EditText newWord;
+    EditText newMeaning;
+
+    List<Word> WordList;
 
 
     @Override
@@ -26,26 +32,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        quoteText = (TextView) findViewById(R.id.newWord);
-        personText = (TextView) findViewById(R.id.wordMeaning);
+        currentWord = (TextView) findViewById(R.id.currentWord);
+        currentMeaning = (TextView) findViewById(R.id.currentMeaning);
+
+        newWord = (EditText)findViewById(R.id.newWord);
+        newMeaning = (EditText)findViewById(R.id.newMeaning);
+
         WordList = new ArrayList<Word>();
 
-        RelativeLayout touch = (RelativeLayout) findViewById(R.id.touch);
+
+        //PopulateDatabase();
+        UpdateWordList();
 
 
-        DatabaseTest();
-
-
+        NextWord();
 
     }
 
-    public void DatabaseTest()
+    public void ClearDatabase(View view)
     {
-        System.out.println("database stuff");
+        DatabaseHelper db = new DatabaseHelper(this);
+        db.deleteAllWords();
 
+        UpdateWordList();
+
+    }
+
+    public void PopulateDatabase()
+    {
         DatabaseHelper db = new DatabaseHelper(this);
 
-        // Inserting Contacts
+        // Inserting words
         Log.d("Insert: ", "Inserting ..");
         db.addWords(new Word("Ambivalent", "Splittet mellem to modstridende meninger, holdninger, følelser"));
         db.addWords(new Word("Kontroversiel", "Omdiskuteret"));
@@ -62,24 +79,59 @@ public class MainActivity extends AppCompatActivity {
             String log = "Id: " + cn.getId() + " ,Word: " + cn.getTheWord() + " ,Meaning: " + cn.getTheMeaning();
             // Writing Contacts to log
             Log.d("Name: ", log);
-
         }
 
-        CreateWords(words);
 
     }
 
-    public void CreateWords(List<Word> database)
+    public void UpdateWordList()
     {
-        for (Word w : database)
+        DatabaseHelper db = new DatabaseHelper(this);
+        WordList = db.getAllWords();
+
+        System.out.println(WordList.size());
+
+
+        if (WordList.size() > 0)
         {
-            WordList.add(w);
+            Word w = WordList.get(count);
+
+            currentWord.setText(w.getTheWord());
+            currentMeaning.setText(w.getTheMeaning());
+        }
+        else
+        {
+            currentWord.setText("[no words in database]");
+            currentMeaning.setText("[no meanings in database]");
         }
     }
 
-    public void ChangeWord(View view)
+    public void InsertNewWord(View view)
+    {
+        //Username = usernameEditText.getText().toString();
+
+        String newWordText = newWord.getText().toString();
+        String newMeaningText = newMeaning.getText().toString();
+
+        if (newWordText.matches("") || newMeaningText.matches(""))
+        {
+            Toast.makeText(this, "Need to write word and meaning!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+            DatabaseHelper db = new DatabaseHelper(this);
+
+            db.addWords(new Word(newWordText, newMeaningText));
+
+        UpdateWordList();
+    }
+
+    void NextWord()
     {
         //System.out.println(count);
+
+        if (WordList.size() == 0)
+            return;
 
         count++;
 
@@ -89,8 +141,13 @@ public class MainActivity extends AppCompatActivity {
 
         Word w = WordList.get(count);
 
-        quoteText.setText(w.getTheWord());
-        personText.setText(w.getTheMeaning());
+        currentWord.setText(w.getTheWord());
+        currentMeaning.setText(w.getTheMeaning());
+    }
+
+    public void ChangeWord(View view)
+    {
+        NextWord();
     }
 
     @Override
