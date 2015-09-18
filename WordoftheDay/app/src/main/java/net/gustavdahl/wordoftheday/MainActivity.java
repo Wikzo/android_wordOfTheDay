@@ -1,7 +1,9 @@
 package net.gustavdahl.wordoftheday;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,13 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     int count = 0;
     TextView quoteText;
     TextView personText;
-    ArrayList<Quote> quoteList;
+    ArrayList<Word> WordList;
 
 
     @Override
@@ -23,75 +26,71 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        quoteText = (TextView) findViewById(R.id.newWord);
+        personText = (TextView) findViewById(R.id.wordMeaning);
+        WordList = new ArrayList<Word>();
+
         RelativeLayout touch = (RelativeLayout) findViewById(R.id.touch);
 
-        quoteText = (TextView) findViewById(R.id.quote);
-        personText = (TextView) findViewById(R.id.person);
-        quoteList = new ArrayList<Quote>();
 
-        Quote quote4 = new Quote("You're more of a fun vampire. You don't suck blood, you just suck.", "Troy Barnes");
-        quoteList.add(quote4);
-
-        Quote quote1 = new Quote("Cool Beans", "Rod Kimble");
-        quoteList.add(quote1);
-
-        Quote quote2 = new Quote("How can mirrors be real if our eyes aren't real", "Jaden Smith");
-        quoteList.add(quote2);
-
-        Quote quote3 = new Quote("That's like me blaming owls for how bad I suck at analogies.", "Britta Perry");
-        quoteList.add(quote3);
-
-        Quote quote5 = new Quote("I was gonna be the first person in my family to graduate from community college. Everyone else graduated from normal college", "Troy Barnes");
-        quoteList.add(quote5);
-
-        //Add more quotes here
+        DatabaseTest();
 
 
-       /* touch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                if (count < quoteList.size()) {
-
-                    Quote q = quoteList.get(count);
-
-                    quoteText.setText(q.getQuote());
-
-                    personText.setText(q.getPerson());
-
-                    count = count + 1;
-
-
-                } else{
-
-                    count = 0;
-
-                }
-            }
-        });*/
     }
 
-    public void ChangeQuote(View view)
+    public void DatabaseTest()
     {
-        System.out.println("Change");
+        System.out.println("database stuff");
 
-        if (count < quoteList.size()) {
+        DatabaseHelper db = new DatabaseHelper(this);
 
-            Quote q = quoteList.get(count);
+        // Inserting Contacts
+        Log.d("Insert: ", "Inserting ..");
+        db.addWords(new Word("Ambivalent", "Splittet mellem to modstridende meninger, holdninger, følelser"));
+        db.addWords(new Word("Kontroversiel", "Omdiskuteret"));
+        db.addWords(new Word("Holisme", "Lægger vægt på at betragte fænomener som helheder snarere end som sammensatte enkeltdele"));
+        db.addWords(new Word("Test", "asdasd"));
 
-            quoteText.setText(q.getQuote());
+        // Reading all contacts
+        Log.d("Reading: ", "Reading all contacts..");
 
-            personText.setText(q.getPerson());
+        List<Word> words = db.getAllWords();
 
-            count = count + 1;
-
-
-        } else{
-
-            count = 0;
+        for (Word cn : words)
+        {
+            String log = "Id: " + cn.getId() + " ,Word: " + cn.getTheWord() + " ,Meaning: " + cn.getTheMeaning();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
 
         }
 
+        CreateWords(words);
+
+    }
+
+    public void CreateWords(List<Word> database)
+    {
+        for (Word w : database)
+        {
+            WordList.add(w);
+        }
+    }
+
+    public void ChangeWord(View view)
+    {
+        //System.out.println(count);
+
+        count++;
+
+
+        if (count > WordList.size()-1)
+            count = 0;
+
+        Word w = WordList.get(count);
+
+        quoteText.setText(w.getTheWord());
+        personText.setText(w.getTheMeaning());
     }
 
     @Override
