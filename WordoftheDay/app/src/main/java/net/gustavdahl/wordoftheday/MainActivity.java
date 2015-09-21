@@ -1,6 +1,5 @@
 package net.gustavdahl.wordoftheday;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,14 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     int count = 0;
     TextView currentWord;
@@ -26,12 +26,21 @@ public class MainActivity extends AppCompatActivity {
 
     List<Word> WordList;
 
+    //private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = "MyDebug";
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        CSVTest();
+
+
+        /*
         currentWord = (TextView) findViewById(R.id.currentWord);
         currentMeaning = (TextView) findViewById(R.id.currentMeaning);
 
@@ -41,53 +50,37 @@ public class MainActivity extends AppCompatActivity {
         WordList = new ArrayList<Word>();
 
 
-        //PopulateDatabase();
+        PopulateDatabase();
         UpdateWordList();
 
 
         NextWord();
+        */
 
     }
 
-    public void ClearDatabase(View view)
+    public void CSVTest()
     {
-        DatabaseHelper db = new DatabaseHelper(this);
-        db.deleteAllWords();
 
-        UpdateWordList();
-
-    }
-
-    public void PopulateDatabase()
-    {
-        DatabaseHelper db = new DatabaseHelper(this);
-
-        // Inserting words
-        Log.d("Insert: ", "Inserting ..");
-        db.addWords(new Word("Ambivalent", "Splittet mellem to modstridende meninger, holdninger, følelser"));
-        db.addWords(new Word("Kontroversiel", "Omdiskuteret"));
-        db.addWords(new Word("Holisme", "Lægger vægt på at betragte fænomener som helheder snarere end som sammensatte enkeltdele"));
-        db.addWords(new Word("Test", "asdasd"));
-
-        // Reading all contacts
-        Log.d("Reading: ", "Reading all contacts..");
-
-        List<Word> words = db.getAllWords();
-
-        for (Word cn : words)
+        try
         {
-            String log = "Id: " + cn.getId() + " ,Word: " + cn.getTheWord() + " ,Meaning: " + cn.getTheMeaning();
-            // Writing Contacts to log
-            Log.d("Name: ", log);
+            InputStream input = getAssets().open("csvTest.csv");
+
+            String s = CSVHelper.GetAllData(input, 3, 0);
+
+            //Log.d(TAG,s);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
 
-
     }
+
+
+
 
     public void UpdateWordList()
     {
-        DatabaseHelper db = new DatabaseHelper(this);
-        WordList = db.getAllWords();
 
         System.out.println(WordList.size());
 
@@ -96,10 +89,9 @@ public class MainActivity extends AppCompatActivity {
         {
             Word w = WordList.get(count);
 
-            currentWord.setText(w.getTheWord());
-            currentMeaning.setText(w.getTheMeaning());
-        }
-        else
+            currentWord.setText(w.getWord());
+            currentMeaning.setText(w.getMeaning());
+        } else
         {
             currentWord.setText("[no words in database]");
             currentMeaning.setText("[no meanings in database]");
@@ -119,9 +111,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-            DatabaseHelper db = new DatabaseHelper(this);
-
-            db.addWords(new Word(newWordText, newMeaningText));
 
         UpdateWordList();
     }
@@ -136,13 +125,13 @@ public class MainActivity extends AppCompatActivity {
         count++;
 
 
-        if (count > WordList.size()-1)
+        if (count > WordList.size() - 1)
             count = 0;
 
         Word w = WordList.get(count);
 
-        currentWord.setText(w.getTheWord());
-        currentMeaning.setText(w.getTheMeaning());
+        currentWord.setText(w.getWord());
+        currentMeaning.setText(w.getMeaning());
     }
 
     public void ChangeWord(View view)
@@ -151,21 +140,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
