@@ -15,14 +15,13 @@ public class Word
 
     private String word;
     private String meaning;
-    private String usedCounter;
-    private String nextDate;
-    private String addedDate;
+    private String usedCounter; // TODO: int
+    private String nextDate; // TODO: date
+    private String addedDate; // TODO: date
     private String notes;
     private String category;
     private String language;
-    private String active;
-
+    private String active; // TODO: int/bool
     private int ID;
 
     public Word(int id, String dataWithDelimiters, String delimiterCharacter)

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -36,11 +37,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        CSVTest();
-
-
-        /*
         currentWord = (TextView) findViewById(R.id.currentWord);
         currentMeaning = (TextView) findViewById(R.id.currentMeaning);
 
@@ -49,24 +45,23 @@ public class MainActivity extends AppCompatActivity
 
         WordList = new ArrayList<Word>();
 
+        LoadCSVData();
 
-        PopulateDatabase();
-        UpdateWordList();
-
-
-        NextWord();
-        */
 
     }
 
-    public void CSVTest()
+    public void LoadCSVData()
     {
 
         try
         {
             InputStream input = getAssets().open("csvTest.csv");
 
-            String s = CSVHelper.GetAllData(input, 3, 0);
+            List<Word> w = CSVHelper.GetAllData(input, 3, 0);
+
+            Log.d(TAG,w.get(1).ToString(true));
+
+            currentWord.setText(w.get(1).getWord());
 
             //Log.d(TAG,s);
         } catch (IOException e)

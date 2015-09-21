@@ -14,7 +14,7 @@ import java.util.List;
 public class CSVHelper
 {
 
-    public static String GetAllData(InputStream in, int row, int column)
+    public static List<Word> GetAllData(InputStream in, int row, int column)
     {
         String next[] = {};
         List<String[]> list = new ArrayList<String[]>();
@@ -68,13 +68,14 @@ public class CSVHelper
 
             //Log.d(MainActivity.TAG, t);
             Word w = new Word(i, t, ";");
+            words.add(w);
 
-           Log.d(MainActivity.TAG, w.ToString(true));
+           //Log.d(MainActivity.TAG, w.ToString(true));
 
 
         }
 
-        return "hr";
+        return words;
 
     }
 }
