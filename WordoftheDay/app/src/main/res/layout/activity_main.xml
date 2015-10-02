@@ -31,56 +31,39 @@
         android:text="[Word&apos;s meaning]"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button
-        android:id="@+id/nextWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="ChangeWord"
-        android:text="Show next word"/>
 
-    <Button
-        android:id="@+id/clearDatabase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/nextWord"
-        android:layout_alignEnd="@+id/nextWord"
-        android:layout_alignRight="@+id/nextWord"
-        android:onClick="ClearDatabase"
-        android:text="Clear database"/>
 
-    <EditText
-        android:id="@+id/newWord"
+
+
+
+
+
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/nextWord"
-        android:layout_alignLeft="@+id/clearDatabase"
-        android:layout_alignRight="@+id/nextWord"
-        android:layout_alignStart="@+id/clearDatabase"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:hint="Write new word"/>
-
-    <EditText
-        android:id="@+id/newMeaning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/newWord"
-        android:hint="Write new word"/>
+        android:id="@+id/mList"
+        />
 
     <Button
-        android:id="@+id/addNewWordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="InsertNewWord"
-        android:text="+"/>
+        android:text="Dropbox start"
+        android:id="@+id/dropbox"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/currentWord"
+        android:layout_alignEnd="@+id/currentWord"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:id="@+id/button"
+        android:layout_marginTop="76dp"
+        android:layout_below="@+id/dropbox"
+        android:layout_alignLeft="@+id/dropbox"
+        android:layout_alignStart="@+id/dropbox"
+        android:onClick="UploadDBText"/>
 
 </RelativeLayout>
