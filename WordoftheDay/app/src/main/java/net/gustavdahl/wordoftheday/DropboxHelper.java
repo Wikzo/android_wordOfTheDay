@@ -1,10 +1,15 @@
 package net.gustavdahl.wordoftheday;
 
+import android.os.Environment;
 import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.exception.DropboxException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -67,8 +72,47 @@ public class DropboxHelper
         }
     }
 
-    public static void DownloadFile()
+    public static void DownloadFile(final String filePath) throws FileNotFoundException
     {
 
+
+        if (MainActivity.mDBApi.getSession().authenticationSuccessful())
+        {
+            Thread thread = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        File root = Environment.getExternalStorageDirectory();
+                        File file= new File (root.getAbsolutePath() + filePath);
+                        try {
+                            FileOutputStream f = new FileOutputStream(file);
+
+                            DropboxAPI.DropboxFileInfo info = MainActivity.mDBApi.getFile(filePath, null, f, null);
+                            Log.i("DbExampleLog", "The file's rev is: " + info.getMetadata().rev);
+
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            Log.i(MainActivity.TAG, "******* File not found. Did you" +
+                                    " add a WRITE_EXTERNAL_STORAGE permission to the   manifest?");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (DropboxException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }
     }
 }

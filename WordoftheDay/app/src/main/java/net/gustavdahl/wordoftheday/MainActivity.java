@@ -90,8 +90,20 @@ public class MainActivity extends AppCompatActivity
 
     public void UploadDBText(View view) throws DropboxException, IOException
     {
-        InputStream input = this.getAssets().open("csv_text.txt");
-        DropboxHelper.UploadFile(input,true);
+        //InputStream input = this.getAssets().open("csv_text.txt");
+        //DropboxHelper.UploadFile(input,true);
+
+
+        String m = "/MyWords2.txt";
+        DropboxHelper.DownloadFile(m);
+
+
+    }
+
+    public void DownloadDBText(View view) throws FileNotFoundException, DropboxException
+    {
+        String m = "/MyWords2.txt";
+        DropboxHelper.DownloadFile(m);
 
     }
 
