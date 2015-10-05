@@ -27,14 +27,13 @@ public class MainActivity extends AppCompatActivity
 {
 
 
-    //private static final String TAG = MainActivity.class.getSimpleName();
     public static final String TAG = "MyDebug";
-    private static final String ACCOUNT_PREFS_NAME = "";
 
     CSVAdapter csvAdapter;
 
 
     private static DropboxAPI<AndroidAuthSession> mDBApi;
+
     public DropboxAPI<AndroidAuthSession> GetDB()
     {
         if (mDBApi == null || RetriveAccessToken() == "")
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity
         }
         return mDBApi;
     }
+
     final static private String APP_KEY = "akbycb3wan8az7a";
     final static private String APP_SECRET = "bqcweeocel5g75a";
     private Button mSubmit;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     private String FileName = "MyWords1.txt";
 
     private DropboxHelper dropboxHelper;
+    boolean dropboxHasInitialized;
 
 
     @Override
@@ -84,12 +85,14 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "Began, stored key: " + RetriveAccessToken(), Toast.LENGTH_SHORT).show();
 
 
-
-
     }
 
-    boolean dropboxHasInitialized;
 
+
+    public void SeeToken(View view)
+    {
+        Toast.makeText(this, "Token: " + RetriveAccessToken(), Toast.LENGTH_SHORT).show();
+    }
 
     public DropboxAPI<AndroidAuthSession> getDropboxAPI()
     {
@@ -98,7 +101,6 @@ public class MainActivity extends AppCompatActivity
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-
 
         String savedAccessToken = RetriveAccessToken();
         if (savedAccessToken != "")
@@ -123,53 +125,8 @@ public class MainActivity extends AppCompatActivity
 
     public void InitializeDropbox(View view)
     {
-
         mDBApi = getDropboxAPI();
-        /*
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-        //mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
 
-
-        String savedAccessToken = RetriveAccessToken();
-        if (savedAccessToken != "")
-            mDBApi.getSession().setOAuth2AccessToken(savedAccessToken);
-        else
-            mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
-
-
-
-
-        // https://stackoverflow.com/questions/19083564/android-dropbox-api-not-saving-login
-
-/*
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-        //mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
-
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-
-        String savedAccessToken = RetriveAccessToken();
-
-        if (!TextUtils.isEmpty(savedAccessToken))
-        {
-            Log.i(TAG, "Using stored token");
-            mDBApi.getSession().setOAuth2AccessToken(savedAccessToken);
-        } else
-        {
-            mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
-            Log.i(TAG, "Getting new token");
-
-        }
-
-
-        dropboxHasInitialized = true;
-
-        Log.i(TAG, "Dropbox successfully initialized!");
-        Toast.makeText(view.getContext(), "Dropbox successfully initialized!", Toast.LENGTH_SHORT).show();
-        */
     }
 
     public boolean isDropboxLinked()
@@ -180,9 +137,6 @@ public class MainActivity extends AppCompatActivity
 
     public void UploadDropbox(View view) throws DropboxException, IOException
     {
-
-
-
         Log.i(TAG, "Dropbox uploading...");
         Toast.makeText(view.getContext(), "Uploading started...", Toast.LENGTH_SHORT).show();
 
@@ -193,7 +147,6 @@ public class MainActivity extends AppCompatActivity
 
     public void DownloadDropbox(View view) throws FileNotFoundException, DropboxException
     {
-
 
         Log.i(TAG, "Dropbox downloading...");
         Toast.makeText(view.getContext(), "Downloading started...", Toast.LENGTH_SHORT).show();
