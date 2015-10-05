@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     private static DropboxAPI<AndroidAuthSession> mDBApi;
     public DropboxAPI<AndroidAuthSession> GetDB()
     {
-        if (mDBApi == null)
+        if (mDBApi == null || RetriveAccessToken() == "")
         {
             mDBApi = getDropboxAPI();
         }
@@ -106,9 +106,20 @@ public class MainActivity extends AppCompatActivity
         else
             mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
 
+        dropboxHasInitialized = true;
         return mDBApi;
     }
 
+
+    public void ClearDB(View view)
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+        editor.clear();
+        editor.commit();
+
+        Toast.makeText(this, "Cleared token:: " + RetriveAccessToken(), Toast.LENGTH_SHORT).show();
+
+    }
 
     public void InitializeDropbox(View view)
     {
@@ -175,7 +186,7 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "Dropbox uploading...");
         Toast.makeText(view.getContext(), "Uploading started...", Toast.LENGTH_SHORT).show();
 
-        dropboxHelper.UploadFile(FileName, this, getDropboxAPI());
+        dropboxHelper.UploadFile(FileName, this, GetDB());
 
 
     }
@@ -187,7 +198,7 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "Dropbox downloading...");
         Toast.makeText(view.getContext(), "Downloading started...", Toast.LENGTH_SHORT).show();
 
-        dropboxHelper.DownloadFile(FileName, this, getDropboxAPI());
+        dropboxHelper.DownloadFile(FileName, this, GetDB());
 
     }
 
