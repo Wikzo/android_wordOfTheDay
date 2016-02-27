@@ -1,99 +1,21 @@
-<RelativeLayout android:id="@+id/touch"
-                xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From: https://developer.android.com/training/basics/firstapp/building-ui.html#Weight -->
 
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/currentWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-medium"
-        android:text="[The new word]"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#0060db"
-        android:textSize="36sp"/>
-
-    <TextView
-        android:id="@+id/currentMeaning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp"
-        android:text="[Word&apos;s meaning]"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-
-
-
-
-
-
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/mList"
-        />
+    <EditText android:id="@+id/edit_message"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:hint="@string/edit_message"
+              android:layout_weight="1"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dropbox start"
-        android:id="@+id/dropbox"
-        android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/currentWord"
-        android:layout_alignEnd="@+id/currentWord"
-        android:onClick="InitializeDropbox"/>
+        android:text="@string/button_send"
+        android:onClick="sendMessage"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DB upload"
-        android:id="@+id/button"
-        android:layout_marginTop="75dp"
-        android:onClick="UploadDropbox"
-        android:layout_below="@+id/dropbox"
-        android:layout_toRightOf="@+id/button2"
-        android:layout_toEndOf="@+id/button2"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DB download"
-        android:id="@+id/button2"
-        android:layout_alignTop="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:onClick="DownloadDropbox"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear"
-        android:id="@+id/button3"
-        android:layout_below="@+id/button"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="ClearDB"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="See token"
-        android:id="@+id/button4"
-        android:layout_below="@+id/button3"
-        android:layout_toLeftOf="@+id/button3"
-        android:layout_toStartOf="@+id/button3"
-        android:onClick="SeeToken"/>
-
-</RelativeLayout>
+</LinearLayout>
