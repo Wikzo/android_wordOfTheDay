@@ -1,7 +1,24 @@
 package net.gustavdahl.wordoftheday;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class Word
 {
+    private static ArrayList<Word> allWordObjects = new ArrayList<Word>();
+    private static ArrayList<String> allWordsAlreadyAdded = new ArrayList<String>();
+
+    public static final String JsonWord = "word";
+    public static final String JsonMeaning = "meaning";
+    public static final String JsonLanguage = "language";
+    public static final String JsonAddedDate = "added-date";
+    public static final String JsonActivationDate = "activation-date";
+    public static final String JsonUsedCount = "used-count";
+    public static final String JsonActive = "active";
+    public static final String JsonIndex = "index";
+
     private String word;
     private String meaning;
     private String language;
@@ -9,6 +26,7 @@ public class Word
     private String activationDate;
     private int usedCount;
     private boolean active;
+    private int index;
 
     public Word(String word,
                            String meaning,
@@ -16,7 +34,7 @@ public class Word
                            String addedDate,
                            String activationDate,
                            int usedCount,
-                           boolean active)
+                           boolean active, int index)
     {
         this.word = word;
         this.meaning = meaning;
@@ -25,8 +43,39 @@ public class Word
         this.activationDate = activationDate;
         this.usedCount = usedCount;
         this.active = active;
+        this.index = index;
+
 
         // TODO: be able to handle null/empty data!
+    }
+
+    public static void AddWord(Word word)
+    {
+        if (!allWordsAlreadyAdded.contains(word.getWord()))
+        {
+            allWordsAlreadyAdded.add(word.getWord());
+            getAllWordObjects().add(word);
+        }
+    }
+
+    public static ArrayList<Word> getAllWordObjects()
+    {
+        return allWordObjects;
+    }
+
+    public JSONObject ToJsonObject() throws JSONException
+    {
+        JSONObject json = new JSONObject();
+        json.put(JsonWord, this.word);
+        json.put(JsonMeaning, this.meaning);
+        json.put(JsonLanguage, this.language);
+        json.put(JsonAddedDate, this.addedDate);
+        json.put(JsonActivationDate, this.activationDate);
+        json.put(JsonUsedCount, this.usedCount);
+        json.put(JsonActive, this.active);
+        json.put(JsonIndex, this.index);
+
+        return json;
     }
 
     @Override
@@ -103,5 +152,10 @@ public class Word
     public void setActive(boolean active)
     {
         this.active = active;
+    }
+
+    public int getIndex()
+    {
+        return index;
     }
 }

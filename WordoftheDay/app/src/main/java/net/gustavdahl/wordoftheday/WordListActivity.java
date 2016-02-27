@@ -28,13 +28,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DisplayMessageActivity extends AppCompatActivity
+public class WordListActivity extends AppCompatActivity
 {
 
     LinearLayout layout;
-    TextView nameTextView;
-    TextView scoreTextView;
     ListView listView;
+
+    static Word selectedWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +56,8 @@ public class DisplayMessageActivity extends AppCompatActivity
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Word.AllWords.clear();
+
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         TextView textView = new TextView(this);
@@ -63,8 +65,6 @@ public class DisplayMessageActivity extends AppCompatActivity
         textView.setText(message);
         layout = (LinearLayout) findViewById(R.id.content);
 
-        nameTextView = (TextView) layout.findViewById(R.id.name);
-        scoreTextView = (TextView) layout.findViewById(R.id.score);
         listView = (ListView) layout.findViewById(R.id.listView);
         layout.addView(textView);
 
@@ -87,58 +87,10 @@ public class DisplayMessageActivity extends AppCompatActivity
 
     private void SetText(TextView textView, String filePath) throws JSONException
     {
-        String read = "";
-        try
-        {
-            read = ReadFile(GetFilePath());
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-
-
-        Log.i(this.toString(), "BEFORE STUFF");
-
-
-        JSONArray jsonarray = new JSONArray(read);
-
-
-        final ArrayList<Word> list = new ArrayList<Word>();
-
-
-        for (int i = 0; i < jsonarray.length(); i++)
-        {
-            JSONObject jsonobject = jsonarray.getJSONObject(i);
-            String word = "";
-            word = jsonobject.getString("word");
-            String meaning = "";
-            meaning = jsonobject.getString("meaning");
-            String language = "";
-            language = jsonobject.getString("language");
-            String addedDate = "";
-            addedDate = jsonobject.getString("added-date");
-            String activationDate = "";
-            activationDate = jsonobject.getString("activation-date");
-            int usedCount;
-            usedCount = jsonobject.getInt("used-count");
-            boolean active;
-            active = jsonobject.getBoolean("active");
-
-            Word word1 = new Word(word,
-                    meaning,
-                    language,
-                    addedDate,
-                    activationDate,
-                    usedCount,
-                    active);
-
-            list.add(word1);
-
-        }
+        InitializeJsonWords();
 
         final ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+                android.R.layout.simple_list_item_1, Word.getAllWordObjects());
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -149,14 +101,85 @@ public class DisplayMessageActivity extends AppCompatActivity
                                     int position, long id)
             {
                 Word word = (Word)parent.getItemAtPosition(position);
-                MainActivity.CurrentWord = word;
-                Toast.makeText(DisplayMessageActivity.this, "Current word has been set: " + word.getWord(), Toast.LENGTH_SHORT).show();
+                selectedWord = word;
+                SetCurrentWord();
+                Toast.makeText(WordListActivity.this, "Current word has been set: " + word.getWord(), Toast.LENGTH_SHORT).show();
             }
 
         });
     }
 
-    private String GetFilePath()
+    public static void SetCurrentWord()
+    {
+        if (selectedWord != null)
+            MainActivity.CurrentWord = selectedWord;
+        else
+            MainActivity.CurrentWord = Word.getAllWordObjects().get(0);
+    }
+
+    public static void InitializeJsonWords() throws JSONException
+    {
+        String read = "";
+        try
+        {
+            read = ReadFile(GetFilePath());
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        JSONArray jsonarray = new JSONArray(read);
+
+        for (int i = 0; i < jsonarray.length(); i++)
+        {
+            JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+            String word = "";
+            if (jsonobject.has(Word.JsonWord))
+                word = jsonobject.getString(Word.JsonWord);
+
+            String meaning = "";
+            if (jsonobject.has(Word.JsonMeaning))
+                meaning = jsonobject.getString(Word.JsonMeaning);
+
+            String language = "";
+            if (jsonobject.has(Word.JsonLanguage))
+                language = jsonobject.getString(Word.JsonLanguage);
+
+            String addedDate = "";
+            if (jsonobject.has(Word.JsonAddedDate))
+                addedDate = jsonobject.getString(Word.JsonAddedDate);
+
+            String activationDate = "";
+            if (jsonobject.has(Word.JsonActivationDate))
+                activationDate = jsonobject.getString(Word.JsonActivationDate);
+
+            int usedCount = 0;
+            if (jsonobject.has(Word.JsonUsedCount))
+                usedCount = jsonobject.getInt(Word.JsonUsedCount);
+
+            boolean active = false;
+            if (jsonobject.has(Word.JsonActive))
+                active = jsonobject.getBoolean(Word.JsonActive);
+
+            int index = i;
+            if (jsonobject.has(Word.JsonIndex))
+                index = jsonobject.getInt(Word.JsonIndex);
+
+            Word word1 = new Word(word,
+                    meaning,
+                    language,
+                    addedDate,
+                    activationDate,
+                    usedCount,
+                    active,
+                    i);
+
+            Word.AddWord(word1);
+        }
+    }
+
+    private static String GetFilePath()
     {
         File path = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOWNLOADS);
@@ -186,12 +209,26 @@ public class DisplayMessageActivity extends AppCompatActivity
             return false;
     }
 
+    public void WriteJsonArray(View view) throws JSONException
+    {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Word word : Word.getAllWordObjects())
+        {
+            JSONObject json = word.ToJsonObject();
+            jsonArray.put(json);
+        }
+
+        WriteFile(jsonArray.toString(), GetFilePath());
+        Toast.makeText(WordListActivity.this, "Words updated in " + GetFilePath(), Toast.LENGTH_SHORT).show();
+    }
+
     void WriteFile(String textToWrite, String filePath)
     {
         try
         {
             BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
-            out.write(WriteJSON());
+            out.write(textToWrite);
             out.close();
         } catch (IOException e)
         {
@@ -199,7 +236,7 @@ public class DisplayMessageActivity extends AppCompatActivity
         }
     }
 
-    public String ReadFile(String path) throws IOException
+    public static String ReadFile(String path) throws IOException
     {
         String text = "";
         BufferedReader br = new BufferedReader(new FileReader(path));
