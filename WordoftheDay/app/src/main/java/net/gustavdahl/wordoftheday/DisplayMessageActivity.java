@@ -3,14 +3,15 @@ package net.gustavdahl.wordoftheday;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -23,9 +24,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DisplayMessageActivity extends AppCompatActivity
 {
+
+    LinearLayout layout;
+    TextView nameTextView;
+    TextView scoreTextView;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,14 +59,19 @@ public class DisplayMessageActivity extends AppCompatActivity
         TextView textView = new TextView(this);
         textView.setTextSize(40);
         textView.setText(message);
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
+        layout = (LinearLayout) findViewById(R.id.content);
+
+        nameTextView = (TextView) layout.findViewById(R.id.name);
+        scoreTextView = (TextView) layout.findViewById(R.id.score);
+        listView = (ListView) layout.findViewById(R.id.listView);
         layout.addView(textView);
+
 
         //textView.setText("Could write to documents: " + WriteToExternalStorage(message));
 
         if (IsExternalStorageWritable())
         {
-            WriteFile(message, GetFilePath());
+            //WriteFile(message, GetFilePath());
             try
             {
                 SetText(textView, GetFilePath());
@@ -67,8 +79,7 @@ public class DisplayMessageActivity extends AppCompatActivity
             {
                 e.printStackTrace();
             }
-        }
-        else
+        } else
             Log.i(this.toString(), "Could not write to " + GetFilePath());
 
     }
@@ -84,11 +95,63 @@ public class DisplayMessageActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        JSONObject json = new JSONObject(read);
+        /*JSONObject json = new JSONObject(read);
+
         String name = json.getString("name");
         int score = json.getInt("score");
 
-        textView.setText("Name: " + name + "; Score: " + score);
+        nameTextView.setText(name);
+        scoreTextView.setText(Integer.toString(score));
+
+        textView.setText("hej");*/
+
+        //nameTextView.setText(read);
+
+        Log.i(this.toString(), "BEFORE STUFF");
+
+
+        JSONArray jsonarray = new JSONArray(read);
+
+
+        final ArrayList<Word> list = new ArrayList<Word>();
+
+
+        for (int i = 0; i < jsonarray.length(); i++)
+        {
+            JSONObject jsonobject = jsonarray.getJSONObject(i);
+            String word = "";
+            word = jsonobject.getString("word");
+            String meaning = "";
+            meaning = jsonobject.getString("meaning");
+            String language = "";
+            language = jsonobject.getString("language");
+            String addedDate = "";
+            addedDate = jsonobject.getString("added-date");
+            String activationDate = "";
+            activationDate = jsonobject.getString("activation-date");
+            int usedCount;
+            usedCount = jsonobject.getInt("used-count");
+            boolean active;
+            active = jsonobject.getBoolean("active");
+
+            Word word1 = new Word(word,
+                    meaning,
+                    language,
+                    addedDate,
+                    activationDate,
+                    usedCount,
+                    active);
+
+            list.add(word1);
+
+        }
+
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(adapter);
+
+
+
     }
 
     private String GetFilePath()
