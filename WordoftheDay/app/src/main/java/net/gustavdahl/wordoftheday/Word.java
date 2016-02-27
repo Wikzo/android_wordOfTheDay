@@ -95,7 +95,7 @@ public class Word
         this.usedCount = usedCount;
     }
 
-    public boolean isActive()
+    public boolean getActive()
     {
         return active;
     }

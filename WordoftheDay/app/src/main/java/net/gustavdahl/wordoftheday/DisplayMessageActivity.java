@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +73,6 @@ public class DisplayMessageActivity extends AppCompatActivity
 
         if (IsExternalStorageWritable())
         {
-            //WriteFile(message, GetFilePath());
             try
             {
                 SetText(textView, GetFilePath());
@@ -95,17 +96,7 @@ public class DisplayMessageActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        /*JSONObject json = new JSONObject(read);
 
-        String name = json.getString("name");
-        int score = json.getInt("score");
-
-        nameTextView.setText(name);
-        scoreTextView.setText(Integer.toString(score));
-
-        textView.setText("hej");*/
-
-        //nameTextView.setText(read);
 
         Log.i(this.toString(), "BEFORE STUFF");
 
@@ -150,8 +141,19 @@ public class DisplayMessageActivity extends AppCompatActivity
                 android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
 
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id)
+            {
+                Word word = (Word)parent.getItemAtPosition(position);
+                MainActivity.CurrentWord = word;
+                Toast.makeText(DisplayMessageActivity.this, "Current word has been set: " + word.getWord(), Toast.LENGTH_SHORT).show();
+            }
 
+        });
     }
 
     private String GetFilePath()
