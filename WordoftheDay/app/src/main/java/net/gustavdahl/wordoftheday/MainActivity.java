@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -13,7 +14,28 @@ public class MainActivity extends AppCompatActivity
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
 
-    public static Word CurrentWord;
+   private TextView wordTextView;
+   private TextView meaningTextView;
+   private TextView languageTextView;
+   private TextView addedDateTextView;
+   private TextView activationDateTextView;
+   private TextView useCountTextView;
+   private TextView activeTextView;
+   private TextView indexTextView;
+
+    private void InitializeTextViews()
+    {
+        wordTextView = (TextView)findViewById(R.id.word_name);
+        meaningTextView = (TextView)findViewById(R.id.word_meaning);
+        languageTextView = (TextView)findViewById(R.id.word_language);
+        addedDateTextView = (TextView)findViewById(R.id.word_addedDate);
+        activationDateTextView = (TextView)findViewById(R.id.word_activationDate);
+        useCountTextView = (TextView)findViewById(R.id.word_useCount);
+        activeTextView = (TextView)findViewById(R.id.word_active);
+        indexTextView = (TextView)findViewById(R.id.word_index);
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,39 +43,53 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        InitializeTextViews();
+
         try
         {
-            WordListActivity.InitializeJsonWords();
+            Word.LoadAllWords();
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
 
-        WordListActivity.SetCurrentWord();
-        UpdateCurrentWord();
+        Word.setSelectedWord(Word.GetActiveWords().get(0));
+        UpdateTextViews();
     }
 
-    private void UpdateCurrentWord()
+    public void UpdateAndSaveCurrentWord(View view) throws JSONException
     {
-        if (CurrentWord != null)
-        {
-            TextView wordTextView = (TextView)findViewById(R.id.word_name);
-            TextView meaningTextView = (TextView)findViewById(R.id.word_meaning);
-            TextView languageTextView = (TextView)findViewById(R.id.word_language);
-            TextView addedDateTextView = (TextView)findViewById(R.id.word_addedDate);
-            TextView activationDateTextView = (TextView)findViewById(R.id.word_activationDate);
-            TextView useCountTextView = (TextView)findViewById(R.id.word_useCount);
-            TextView activeTextView = (TextView)findViewById(R.id.word_active);
-            TextView indexTextView = (TextView)findViewById(R.id.word_index);
+        Word selectedWord = Word.getSelectedWord();
 
-            wordTextView.setText(CurrentWord.getWord());
-            meaningTextView.setText(CurrentWord.getMeaning());
-            languageTextView.setText(CurrentWord.getLanguage());
-            addedDateTextView.setText(CurrentWord.getAddedDate());
-            activationDateTextView.setText(CurrentWord.getActivationDate());
-            useCountTextView.setText(Integer.toString(CurrentWord.getUsedCount()));
-            activeTextView.setText(String.valueOf(CurrentWord.getActive()));
-            indexTextView.setText(String.valueOf(CurrentWord.getIndex()));
+        if (selectedWord != null)
+        {
+            selectedWord.setWord(wordTextView.getText().toString());
+            selectedWord.setMeaning(meaningTextView.getText().toString());
+            selectedWord.setLanguage(languageTextView.getText().toString());
+            selectedWord.setAddedDate(addedDateTextView.getText().toString());
+            selectedWord.setActivationDate(activationDateTextView.getText().toString());
+            selectedWord.setUsedCount(Integer.parseInt(useCountTextView.getText().toString()));
+            selectedWord.setActive(Boolean.parseBoolean(activeTextView.getText().toString()));
+            selectedWord.setIndex(Integer.parseInt(indexTextView.getText().toString()));
+        }
+
+        Word.SaveAllWords();
+    }
+
+    private void UpdateTextViews()
+    {
+        Word selectedWord = Word.getSelectedWord();
+
+        if (selectedWord != null)
+        {
+            wordTextView.setText(selectedWord.getWord());
+            meaningTextView.setText(selectedWord.getMeaning());
+            languageTextView.setText(selectedWord.getLanguage());
+            addedDateTextView.setText(selectedWord.getAddedDate());
+            activationDateTextView.setText(selectedWord.getActivationDate());
+            useCountTextView.setText(Integer.toString(selectedWord.getUsedCount()));
+            activeTextView.setText(String.valueOf(selectedWord.getActive()));
+            indexTextView.setText(String.valueOf(selectedWord.getIndex()));
         }
     }
 
@@ -67,10 +103,52 @@ public class MainActivity extends AppCompatActivity
 
     public void EditCurrentWord(View view)
     {
-        CurrentWord.setUsedCount(CurrentWord.getUsedCount() + 1);
+        Word.getSelectedWord().setUsedCount(Word.getSelectedWord().getUsedCount() + 1);
+        UpdateTextViews();
+    }
 
-        UpdateCurrentWord();
+    public void WriteDummyFile(View view)
+    {
+        boolean success = JsonFileReader.WriteDummyFile();
 
+        String text = "Wrote dummy file in:" + JsonFileReader.GetFilePath();
+
+        if (!success)
+            text = "Could NOT write dummy file in: " + JsonFileReader.GetFilePath();
+
+        Toast.makeText(
+                MainActivity.this,
+                text,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        try
+        {
+            UpdateAndSaveCurrentWord(null);
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        try
+        {
+            UpdateAndSaveCurrentWord(null);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 }

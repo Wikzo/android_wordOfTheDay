@@ -1,14 +1,19 @@
 package net.gustavdahl.wordoftheday;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Word
 {
-    private static ArrayList<Word> allWordObjects = new ArrayList<Word>();
-    private static ArrayList<String> allWordsAlreadyAdded = new ArrayList<String>();
+    private static Word SelectedWord;
+
+    private static List<Word> allWordObjects = new ArrayList<Word>();
+    private static List<String> allWordsAlreadyAdded = new ArrayList<String>();
 
     public static final String JsonWord = "word";
     public static final String JsonMeaning = "meaning";
@@ -51,16 +56,43 @@ public class Word
 
     public static void AddWord(Word word)
     {
-        if (!allWordsAlreadyAdded.contains(word.getWord()))
+        allWordObjects.add(word);
+
+        // TODO: error check that no duplicates exist
+        /*if (!allWordsAlreadyAdded.contains(word.getWord()))
         {
             allWordsAlreadyAdded.add(word.getWord());
-            getAllWordObjects().add(word);
-        }
+            allWordObjects.add(word);
+        }*/
     }
 
-    public static ArrayList<Word> getAllWordObjects()
+    public static List<Word> getAllWordObjects()
     {
         return allWordObjects;
+    }
+
+    public static Word getSelectedWord()
+    {
+        if (SelectedWord == null)
+        {
+            if (allWordObjects.size() > 0)
+                return allWordObjects.get(0);
+            else
+            {
+                Log.i("ERROR", "ERROR! No words avilable for selection");
+                return null;
+            }
+        }
+        else
+            return SelectedWord;
+    }
+
+    public static void setSelectedWord(Word selectedWord)
+    {
+        if (selectedWord == null)
+            Log.i("ERROR", "ERROR. Cannot set selected word to null!");
+        else
+            SelectedWord = selectedWord;
     }
 
     public JSONObject ToJsonObject() throws JSONException
@@ -76,6 +108,29 @@ public class Word
         json.put(JsonIndex, this.index);
 
         return json;
+    }
+
+    public static boolean SaveAllWords() throws JSONException
+    {
+        return JsonFileReader.WriteJsonArray();
+    }
+
+    public static void LoadAllWords() throws JSONException
+    {
+       // if
+        allWordObjects = new ArrayList<Word>(JsonFileReader.InitializeJsonWords());
+    }
+
+    public static List<Word> GetActiveWords()
+    {
+        List<Word> activeWords = new ArrayList<Word>();
+        for (Word word : allWordObjects)
+        {
+            if (word.active)
+                activeWords.add(word);
+        }
+
+        return activeWords;
     }
 
     @Override
@@ -157,5 +212,10 @@ public class Word
     public int getIndex()
     {
         return index;
+    }
+
+    public void setIndex(int index)
+    {
+        this.index = index;
     }
 }

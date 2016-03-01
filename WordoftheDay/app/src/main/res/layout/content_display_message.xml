@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="UpdateFile"
         android:id="@+id/update_file"
-        android:onClick="WriteJsonArray"/>
+        android:onClick="UpdateJsonFile"/>
 
     <ListView
         android:layout_width="wrap_content"
