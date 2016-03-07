@@ -18,9 +18,9 @@ public class Word
     public static final String JsonWord = "word";
     public static final String JsonMeaning = "meaning";
     public static final String JsonLanguage = "language";
-    public static final String JsonAddedDate = "added-date";
-    public static final String JsonActivationDate = "activation-date";
-    public static final String JsonUsedCount = "used-count";
+    public static final String JsonAddedDate = "addedDate";
+    public static final String JsonActivationDate = "activationDate";
+    public static final String JsonUsedCount = "usedCount";
     public static final String JsonActive = "active";
     public static final String JsonIndex = "index";
 

@@ -1,0 +1,11 @@
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\bin\Debug\JsonCreator.exe.config
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\bin\Debug\JsonCreator.exe
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\bin\Debug\JsonCreator.pdb
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.csprojResolveAssemblyReference.cache
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.Form1.resources
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.Properties.Resources.resources
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.csproj.GenerateResource.Cache
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.exe
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\obj\Debug\JsonCreator.pdb
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Wikzo\Documents\android_wordOfTheDay\JsonCreator\JsonCreator\bin\Debug\Newtonsoft.Json.xml
