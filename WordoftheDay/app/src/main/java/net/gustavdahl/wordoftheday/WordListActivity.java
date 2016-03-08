@@ -23,13 +23,6 @@ public class WordListActivity extends AppCompatActivity
     LinearLayout layout;
     ListView listView;
 
-    public static void SetCurrentWord(Word selectedWord)
-    {
-        if (selectedWord != null)
-            Word.setSelectedWord(selectedWord);
-        else
-            Word.setSelectedWord(Word.GetActiveWords().get(0));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,23 +59,24 @@ public class WordListActivity extends AppCompatActivity
 
         //textView.setText("Could write to documents: " + WriteToExternalStorage(message));
 
-        if (JsonFileReader.IsExternalStorageWritable())
+        if (JsonFileManager.IsExternalStorageWritable())
         {
             try
             {
-                SetText(textView, JsonFileReader.GetFilePath());
+                SetText(textView, JsonFileManager.GetFilePath());
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
         } else
-            Log.i(this.toString(), "Could not write to " + JsonFileReader.GetFilePath());
+            Log.i(this.toString(), "Could not write to " + JsonFileManager.GetFilePath());
 
     }
 
     private void SetText(TextView textView, String filePath) throws JSONException
     {
 
+        boolean pressed;
         final ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, Word.getAllWordObjects());
         listView.setAdapter(adapter);
@@ -96,32 +90,42 @@ public class WordListActivity extends AppCompatActivity
             {
                 Word word = (Word) parent.getItemAtPosition(position);
 
-                word.setActive(!word.getActive());
+                /*word.setActive(!word.getActive());
                 boolean isActive = word.getActive();
 
                 Toast.makeText(
                         WordListActivity.this,
                         word.getWord() + " is active: " + word.getActive(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
+
+                Word.setSelectedWord(word);
+                ChangeToEditWordActivity();
+
             }
 
         });
+
+
+    }
+    private void ChangeToEditWordActivity()
+    {
+        Intent intent = new Intent(this, EditWord.class);
+        startActivity(intent);
     }
 
     public void UpdateJsonFile(View view) throws JSONException
     {
         boolean success = Word.SaveAllWords();
-        String text = "Words succesfully saved in: " + JsonFileReader.GetFilePath();
+        String text = "Words succesfully saved in: " + JsonFileManager.GetFilePath();
 
         if (!success)
-            text = "Words NOT saved in: " + JsonFileReader.GetFilePath();
+            text = "Words NOT saved in: " + JsonFileManager.GetFilePath();
 
         Toast.makeText(
                 WordListActivity.this,
                 text,
                 Toast.LENGTH_SHORT).show();
 
-        //System.out.println(JsonFileReader.ConvertWordsToJsonArray());
     }
 
 

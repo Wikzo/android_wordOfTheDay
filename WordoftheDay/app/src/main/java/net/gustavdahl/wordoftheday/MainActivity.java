@@ -1,9 +1,12 @@
+// main
+
 package net.gustavdahl.wordoftheday;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,25 +19,16 @@ public class MainActivity extends AppCompatActivity
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
 
-   private TextView wordTextView;
-   private TextView meaningTextView;
-   private TextView languageTextView;
-   private TextView addedDateTextView;
-   private TextView activationDateTextView;
-   private TextView useCountTextView;
-   private TextView activeTextView;
-   private TextView indexTextView;
+    private TextView wordTextView;
+    private TextView meaningTextView;
+    private RatingBar usedCountStars;
+
 
     private void InitializeTextViews()
     {
         wordTextView = (TextView)findViewById(R.id.word_name);
         meaningTextView = (TextView)findViewById(R.id.word_meaning);
-        languageTextView = (TextView)findViewById(R.id.word_language);
-        addedDateTextView = (TextView)findViewById(R.id.word_addedDate);
-        activationDateTextView = (TextView)findViewById(R.id.word_activationDate);
-        useCountTextView = (TextView)findViewById(R.id.word_useCount);
-        activeTextView = (TextView)findViewById(R.id.word_active);
-        indexTextView = (TextView)findViewById(R.id.word_index);
+        usedCountStars = (RatingBar)findViewById(R.id.usedCountStars);
     }
 
 
@@ -56,34 +50,15 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        Word.setSelectedWord(Word.GetActiveWords().get(0));
+        Word.setSelectedWord(Word.allActiveWordObjects.get(0));
         UpdateTextViews();
     }
 
     private void CheckIfJsonFileExists()
     {
-        File f = new File(JsonFileReader.GetFilePath());
+        File f = new File(JsonFileManager.GetFilePath());
         if(!f.exists())
-            JsonFileReader.WriteDummyFile();
-    }
-
-    public void UpdateAndSaveCurrentWord(View view) throws JSONException
-    {
-        Word selectedWord = Word.getSelectedWord();
-
-        if (selectedWord != null)
-        {
-            selectedWord.setWord(wordTextView.getText().toString());
-            selectedWord.setMeaning(meaningTextView.getText().toString());
-            selectedWord.setLanguage(languageTextView.getText().toString());
-            selectedWord.setAddedDate(addedDateTextView.getText().toString());
-            selectedWord.setActivationDate(activationDateTextView.getText().toString());
-            selectedWord.setUsedCount(Integer.parseInt(useCountTextView.getText().toString()));
-            selectedWord.setActive(Boolean.parseBoolean(activeTextView.getText().toString()));
-            selectedWord.setIndex(Integer.parseInt(indexTextView.getText().toString()));
-        }
-
-        Word.SaveAllWords();
+            JsonFileManager.WriteDummyFile();
     }
 
     private void UpdateTextViews()
@@ -94,37 +69,65 @@ public class MainActivity extends AppCompatActivity
         {
             wordTextView.setText(selectedWord.getWord());
             meaningTextView.setText(selectedWord.getMeaning());
-            languageTextView.setText(selectedWord.getLanguage());
-            addedDateTextView.setText(selectedWord.getAddedDate());
-            activationDateTextView.setText(selectedWord.getActivationDate());
-            useCountTextView.setText(Integer.toString(selectedWord.getUsedCount()));
-            activeTextView.setText(String.valueOf(selectedWord.getActive()));
-            indexTextView.setText(String.valueOf(selectedWord.getIndex()));
+
+            usedCountStars.setRating(Math.min(3, selectedWord.getUsedCount()));
         }
     }
 
-    public void sendMessage(View view)
+    public void CheckWordHasBeenUsed(View view) throws JSONException
+    {
+        Word.getSelectedWord().incrementUsedCount();
+
+        Word.SaveAllWords();
+        UpdateTextViews();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        UpdateTextViews();
+    }
+
+    public void ShowWordList(View view)
     {
         Intent intent = new Intent(this, WordListActivity.class);
-        String message = "test_message";
-        intent.putExtra(EXTRA_MESSAGE, message);
+       // String message = "test_message";
+       //intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 
     public void EditCurrentWord(View view)
     {
-        Word.getSelectedWord().setUsedCount(Word.getSelectedWord().getUsedCount() + 1);
+        //Word.getSelectedWord().setUsedCount(Word.getSelectedWord().getUsedCount() + 1);
+        //UpdateTextViews();
+
+        Intent intent = new Intent(this, EditWord.class);
+        //String message = "test_message";
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    public void GetNextActiveWord(View view)
+    {
+        Word.setSelectedWord(Word.GetNextWord());
+        UpdateTextViews();
+    }
+
+    public void GetPreviousActiveWord(View view)
+    {
+        Word.setSelectedWord(Word.GetPreviousWord());
         UpdateTextViews();
     }
 
     public void WriteDummyFile(View view)
     {
-        boolean success = JsonFileReader.WriteDummyFile();
+        boolean success = JsonFileManager.WriteDummyFile();
 
-        String text = "Wrote dummy file in:" + JsonFileReader.GetFilePath();
+        String text = "Wrote dummy file in:" + JsonFileManager.GetFilePath();
 
         if (!success)
-            text = "Could NOT write dummy file in: " + JsonFileReader.GetFilePath();
+            text = "Could NOT write dummy file in: " + JsonFileManager.GetFilePath();
 
         Toast.makeText(
                 MainActivity.this,
@@ -132,33 +135,4 @@ public class MainActivity extends AppCompatActivity
                 Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-
-        try
-        {
-            UpdateAndSaveCurrentWord(null);
-
-        } catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        try
-        {
-            UpdateAndSaveCurrentWord(null);
-        } catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
 }

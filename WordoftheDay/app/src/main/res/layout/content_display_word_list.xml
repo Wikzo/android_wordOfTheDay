@@ -15,13 +15,6 @@
     android:id="@+id/content"
     android:clickable="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UpdateFile"
-        android:id="@+id/update_file"
-        android:onClick="UpdateJsonFile"/>
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

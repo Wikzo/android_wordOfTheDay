@@ -24,33 +24,39 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Word"
-                android:id="@+id/button"
-                android:layout_weight="1"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Word List"
-                android:id="@+id/button2"
+                android:id="@+id/wordList"
                 android:layout_weight="1"
-                android:onClick="sendMessage"/>
+                android:onClick="ShowWordList"
+                />
 
-            <Button
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DummyWrite"
-                android:id="@+id/button3"
-                android:layout_weight="1"
-                android:onClick="WriteDummyFile"/>
+                android:gravity="bottom"
+                android:layout_gravity="bottom">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save/Update"
-                android:id="@+id/button4"
-                android:layout_weight="1"
-                android:onClick="UpdateAndSaveCurrentWord"/>
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt;---"
+                    android:id="@+id/prevWord"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:onClick="GetPreviousActiveWord"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--->"
+                    android:id="@+id/nextWord"
+                    android:layout_weight="1"
+                    android:onClick="GetNextActiveWord"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
@@ -61,166 +67,61 @@
         android:layout_height="match_parent"
         android:padding="20dp">
 
-        <EditText
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Holisme"
             android:id="@+id/word_name"
             android:layout_gravity="center"
             android:padding="20dp"
+            android:gravity="center"
             android:onClick="EditCurrentWord"/>
 
-        <EditText
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Lægger vægt på at betragte fænomener som helheder snarere end som sammensatte enkeltdele"
             android:id="@+id/word_meaning"
             android:layout_gravity="center"
-            android:padding="10dp"/>
+            android:padding="20dp"
+            android:gravity="center"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            >
 
-            <TextView
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="77dp"
+                android:id="@+id/checkUsed"
+                android:src="@drawable/checkmark"
+                android:onClick="CheckWordHasBeenUsed"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"/>
+
+            <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Language:"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal"/>
+                android:id="@+id/usedCountStars"
+                android:numStars="3"
+                android:rating="0"
+                android:isIndicator="true"
+                android:focusable="false"
+                android:clickable="false"
+                android:stepSize="1"
+                android:layout_gravity="center|bottom"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="47dp"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="DK"
-                android:id="@+id/word_language"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Added Date:"
-                android:id="@+id/textView"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="01-02-2016"
-                android:id="@+id/word_addedDate"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Activation Date:"
-                android:id="@+id/textView3"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="10-03-2016"
-                android:id="@+id/word_activationDate"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Used Count:"
-                android:id="@+id/textView5"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="3"
-                android:id="@+id/word_useCount"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Active:"
-                android:id="@+id/textView7"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="TRUE"
-                android:id="@+id/word_active"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Index"
-                android:id="@+id/textView2"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="1234"
-                android:id="@+id/word_index"
-                android:layout_weight="1"/>
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

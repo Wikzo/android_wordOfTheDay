@@ -13,7 +13,8 @@ public class Word
     private static Word SelectedWord;
 
     private static List<Word> allWordObjects = new ArrayList<Word>();
-    private static List<String> allWordsAlreadyAdded = new ArrayList<String>();
+    public static List<Word> allActiveWordObjects = new ArrayList<Word>();
+    public static int WordIndex = 0;
 
     public static final String JsonWord = "word";
     public static final String JsonMeaning = "meaning";
@@ -71,6 +72,26 @@ public class Word
         return allWordObjects;
     }
 
+    public static Word GetNextWord()
+    {
+        if (WordIndex + 1 < allActiveWordObjects.size())
+            WordIndex++;
+        else
+            WordIndex = 0;
+
+        return allActiveWordObjects.get(WordIndex);
+    }
+
+    public static Word GetPreviousWord()
+    {
+        if (WordIndex -1 > -1)
+            WordIndex--;
+        else
+            WordIndex = allActiveWordObjects.size() - 1;
+
+        return allActiveWordObjects.get(WordIndex);
+    }
+
     public static Word getSelectedWord()
     {
         if (SelectedWord == null)
@@ -112,25 +133,28 @@ public class Word
 
     public static boolean SaveAllWords() throws JSONException
     {
-        return JsonFileReader.WriteJsonArray();
+        boolean success = JsonFileManager.WriteJsonArray();
+        GetActiveWords();
+
+        return success;
     }
 
     public static void LoadAllWords() throws JSONException
     {
-       // if
-        allWordObjects = new ArrayList<Word>(JsonFileReader.InitializeJsonWords());
+        allWordObjects = new ArrayList<Word>(JsonFileManager.InitializeJsonWords());
+
+        GetActiveWords();
+
     }
 
-    public static List<Word> GetActiveWords()
+    private static void GetActiveWords()
     {
-        List<Word> activeWords = new ArrayList<Word>();
+        allActiveWordObjects.clear();
         for (Word word : allWordObjects)
         {
             if (word.active)
-                activeWords.add(word);
+                allActiveWordObjects.add(word);
         }
-
-        return activeWords;
     }
 
     @Override
@@ -199,6 +223,10 @@ public class Word
         this.usedCount = usedCount;
     }
 
+    public void incrementUsedCount()
+    {
+        this.usedCount++;
+    }
     public boolean getActive()
     {
         return active;

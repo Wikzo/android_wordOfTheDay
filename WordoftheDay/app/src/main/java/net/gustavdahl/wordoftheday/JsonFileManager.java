@@ -2,8 +2,6 @@ package net.gustavdahl.wordoftheday;
 
 
 import android.os.Environment;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,14 +9,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonFileReader
+public class JsonFileManager
 {
     private static final String dummyText = "[ { \"word\": \"DUMMY1 \", \"meaning\": \"Splittet mellem to modstridende meninger, holdninger, følelser\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 2, \"active\": true, \"index\": 0 }, { \"word\": \"DUMMY2\", \"meaning\": \"Omdiskuteret\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": true, \"index\": 0 }, { \"word\": \"DUMMY3\", \"meaning\": \"Lægger vægt på at betragte fænomener som helheder snarere end som sammensatte enkeltdele\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": false, \"index\": 0 }, { \"word\": \"DUMMY4\", \"meaning\": \"Vanemæssig, en kendsgerning\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": true, \"index\": 0 }, { \"word\": \"DUMMY5\", \"meaning\": \"Ikke-religiøst, alt hvad der ikke har med kirken og religion at gøre\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": true, \"index\": 0 }, { \"word\": \"DUMMY6\", \"meaning\": \"Nerver og psykiske lidelser\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": false, \"index\": 0 }, { \"word\": \"DUMMY7\", \"meaning\": \"Hul, utæthed, læk\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": false, \"index\": 0 }, { \"word\": \"DUMMY8\", \"meaning\": \"Bager med fine kager og desserter\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": true, \"index\": 0 }, { \"word\": \"DUMMY9\", \"meaning\": \"Meaning\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": false, \"index\": 0 }, { \"word\": \"DUMMY10\", \"meaning\": \"Meaning test\", \"language\": \"DK\", \"addedDate\": \"08-03-2016\", \"activationDate\": \"08-03-2016\", \"usedCount\": 0, \"active\": false, \"index\": 0 } ]";
 
@@ -128,7 +125,7 @@ public class JsonFileReader
 
     public static boolean WriteJsonArray() throws JSONException
     {
-        return WriteFile(ConvertWordsToJsonArray(), JsonFileReader.GetFilePath());
+        return WriteFile(ConvertWordsToJsonArray(), JsonFileManager.GetFilePath());
     }
 
     public static boolean WriteDummyFile()
