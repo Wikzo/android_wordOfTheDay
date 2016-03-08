@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity
 {
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         InitializeTextViews();
+        CheckIfJsonFileExists();
 
         try
         {
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity
 
         Word.setSelectedWord(Word.GetActiveWords().get(0));
         UpdateTextViews();
+    }
+
+    private void CheckIfJsonFileExists()
+    {
+        File f = new File(JsonFileReader.GetFilePath());
+        if(!f.exists())
+            JsonFileReader.WriteDummyFile();
     }
 
     public void UpdateAndSaveCurrentWord(View view) throws JSONException

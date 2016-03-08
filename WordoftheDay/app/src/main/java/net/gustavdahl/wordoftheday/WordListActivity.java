@@ -2,7 +2,6 @@ package net.gustavdahl.wordoftheday;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class WordListActivity extends AppCompatActivity
 {
@@ -46,7 +35,7 @@ public class WordListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_message);
+        setContentView(R.layout.activity_display_word_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
