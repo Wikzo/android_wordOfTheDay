@@ -50,6 +50,7 @@ namespace JsonCreator
         {
             if (!_words.Contains(_currentWord))
             {
+                _currentWord.CleanupStrings();
                 _words.Add(_currentWord);
                 _index = _words.Count();
             }
@@ -72,7 +73,8 @@ namespace JsonCreator
             this.ActivationDateTextBox.Text = _currentWord.activationDate;
             this.UsedCountTextBox.Text = _currentWord.usedCount.ToString();
             this.ActiveTextBox.Text = _currentWord.active.ToString();
-            this.IndexTextBox.Text = _currentWord.index.ToString();
+            this.PriorityTextBox.Text = _currentWord.priority.ToString();
+            this.NotesTextBox.Text = _currentWord.notes;
         }
 
 
@@ -97,7 +99,9 @@ namespace JsonCreator
             _currentWord.activationDate = this.ActivationDateTextBox.Text;
             _currentWord.usedCount = Convert.ToInt32(this.UsedCountTextBox.Text);
             _currentWord.active = Convert.ToBoolean(this.ActiveTextBox.Text);
-            _currentWord.index = Convert.ToInt32(this.IndexTextBox.Text);
+            _currentWord.priority = Convert.ToInt32(this.PriorityTextBox.Text);
+            _currentWord.notes = this.NotesTextBox.Text;
+
         }
 
         private string SaveJson()
@@ -291,6 +295,11 @@ namespace JsonCreator
         }
 
         private void MeaningTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
 
         }

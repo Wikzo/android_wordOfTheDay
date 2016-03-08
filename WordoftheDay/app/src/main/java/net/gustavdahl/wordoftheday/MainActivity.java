@@ -58,19 +58,23 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        Word.setSelectedWord(Word.allActiveWordObjects.get(0));
+        if (Word.allActiveWordObjects.size() > 0)
+        {
+            Word.setSelectedWord(Word.allActiveWordObjects.get(0));
+
+            //TODO: save calendar as persitable
+            // https://developer.android.com/guide/components/activities.html
+
+            if (calendar == null)
+                calendar = GetRandomTime();
+
+            scheduleNotification(getNotification(Word.getSelectedWord().getWord()), calendar);
+            Toast.makeText(MainActivity.this, "Next time: " + calendar.getTime(), Toast.LENGTH_LONG).show();
+        }
         UpdateTextViews();
 
-        //TODO: save calendar as persitable
-        // https://developer.android.com/guide/components/activities.html
-
-        if (calendar == null)
-            calendar = GetRandomTime();
-
-        scheduleNotification(getNotification(Word.getSelectedWord().getWord()), calendar);
-        Toast.makeText(MainActivity.this, "Next time: " + calendar.getTime(), Toast.LENGTH_LONG).show();
-
     }
+
 
     private Calendar GetRandomTime()
     {
@@ -150,14 +154,23 @@ public class MainActivity extends AppCompatActivity
 
             usedCountStars.setRating(Math.min(3, selectedWord.getUsedCount()));
         }
+        else
+        {
+            wordTextView.setText("NO ACTIVE WORDS!");
+            meaningTextView.setText("NO ACTIVE WORDS!");
+        }
     }
+
 
     public void CheckWordHasBeenUsed(View view) throws JSONException
     {
-        Word.getSelectedWord().incrementUsedCount();
+        if (Word.getSelectedWord() != null)
+        {
+            Word.getSelectedWord().incrementUsedCount();
 
-        Word.SaveAllWords();
-        UpdateTextViews();
+            Word.SaveAllWords();
+            UpdateTextViews();
+        }
     }
 
     @Override
@@ -177,25 +190,29 @@ public class MainActivity extends AppCompatActivity
 
     public void EditCurrentWord(View view)
     {
-        //Word.getSelectedWord().setUsedCount(Word.getSelectedWord().getUsedCount() + 1);
-        //UpdateTextViews();
-
-        Intent intent = new Intent(this, EditWord.class);
-        //String message = "test_message";
-        //intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        if (Word.getSelectedWord() != null)
+        {
+            Intent intent = new Intent(this, EditWord.class);
+            startActivity(intent);
+        }
     }
 
     public void GetNextActiveWord(View view)
     {
-        Word.setSelectedWord(Word.GetNextWord());
-        UpdateTextViews();
+        if (Word.allActiveWordObjects.size() > 0)
+        {
+            Word.setSelectedWord(Word.GetNextWord());
+            UpdateTextViews();
+        }
     }
 
     public void GetPreviousActiveWord(View view)
     {
-        Word.setSelectedWord(Word.GetPreviousWord());
-        UpdateTextViews();
+        if (Word.allActiveWordObjects.size() > 0)
+        {
+            Word.setSelectedWord(Word.GetPreviousWord());
+            UpdateTextViews();
+        }
     }
 
     public void WriteDummyFile(View view)

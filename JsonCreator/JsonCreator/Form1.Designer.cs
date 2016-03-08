@@ -36,9 +36,9 @@
             this.ActivationDateTextBox = new System.Windows.Forms.RichTextBox();
             this.UsedCountTextBox = new System.Windows.Forms.RichTextBox();
             this.ActiveTextBox = new System.Windows.Forms.RichTextBox();
-            this.IndexTextBox = new System.Windows.Forms.RichTextBox();
+            this.PriorityTextBox = new System.Windows.Forms.RichTextBox();
             this.SaveWord = new System.Windows.Forms.Button();
-            this.IndexLabel = new System.Windows.Forms.RichTextBox();
+            this.PriorityLabel = new System.Windows.Forms.RichTextBox();
             this.ActiveLabel = new System.Windows.Forms.RichTextBox();
             this.UsedCountLabel = new System.Windows.Forms.RichTextBox();
             this.ActivationDateLabel = new System.Windows.Forms.RichTextBox();
@@ -49,12 +49,14 @@
             this.LoadJsonFile = new System.Windows.Forms.Button();
             this.NextWord = new System.Windows.Forms.Button();
             this.PreviousWord = new System.Windows.Forms.Button();
+            this.NotesTextBox = new System.Windows.Forms.RichTextBox();
+            this.NotesLabel = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // CreateNewWord
             // 
             this.CreateNewWord.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CreateNewWord.Location = new System.Drawing.Point(424, 56);
+            this.CreateNewWord.Location = new System.Drawing.Point(592, 70);
             this.CreateNewWord.Name = "CreateNewWord";
             this.CreateNewWord.Size = new System.Drawing.Size(146, 43);
             this.CreateNewWord.TabIndex = 2;
@@ -120,20 +122,20 @@
             this.ActiveTextBox.TabIndex = 10;
             this.ActiveTextBox.Text = "";
             // 
-            // IndexTextBox
+            // PriorityTextBox
             // 
-            this.IndexTextBox.Location = new System.Drawing.Point(196, 569);
-            this.IndexTextBox.Name = "IndexTextBox";
-            this.IndexTextBox.Size = new System.Drawing.Size(542, 57);
-            this.IndexTextBox.TabIndex = 11;
-            this.IndexTextBox.Text = "";
-            this.IndexTextBox.TextChanged += new System.EventHandler(this.IndexTextBox_TextChanged);
+            this.PriorityTextBox.Location = new System.Drawing.Point(196, 569);
+            this.PriorityTextBox.Name = "PriorityTextBox";
+            this.PriorityTextBox.Size = new System.Drawing.Size(542, 57);
+            this.PriorityTextBox.TabIndex = 11;
+            this.PriorityTextBox.Text = "";
+            this.PriorityTextBox.TextChanged += new System.EventHandler(this.IndexTextBox_TextChanged);
             // 
             // SaveWord
             // 
             this.SaveWord.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.SaveWord.ForeColor = System.Drawing.Color.Black;
-            this.SaveWord.Location = new System.Drawing.Point(592, 56);
+            this.SaveWord.Location = new System.Drawing.Point(172, 12);
             this.SaveWord.Name = "SaveWord";
             this.SaveWord.Size = new System.Drawing.Size(146, 43);
             this.SaveWord.TabIndex = 3;
@@ -141,16 +143,16 @@
             this.SaveWord.UseVisualStyleBackColor = false;
             this.SaveWord.Click += new System.EventHandler(this.SaveWord_Click);
             // 
-            // IndexLabel
+            // PriorityLabel
             // 
-            this.IndexLabel.Location = new System.Drawing.Point(20, 569);
-            this.IndexLabel.Name = "IndexLabel";
-            this.IndexLabel.ReadOnly = true;
-            this.IndexLabel.Size = new System.Drawing.Size(152, 57);
-            this.IndexLabel.TabIndex = 17;
-            this.IndexLabel.TabStop = false;
-            this.IndexLabel.Text = "Index";
-            this.IndexLabel.TextChanged += new System.EventHandler(this.IndexLabel_TextChanged);
+            this.PriorityLabel.Location = new System.Drawing.Point(20, 569);
+            this.PriorityLabel.Name = "PriorityLabel";
+            this.PriorityLabel.ReadOnly = true;
+            this.PriorityLabel.Size = new System.Drawing.Size(152, 57);
+            this.PriorityLabel.TabIndex = 17;
+            this.PriorityLabel.TabStop = false;
+            this.PriorityLabel.Text = "Priority";
+            this.PriorityLabel.TextChanged += new System.EventHandler(this.IndexLabel_TextChanged);
             // 
             // ActiveLabel
             // 
@@ -263,17 +265,38 @@
             this.PreviousWord.UseVisualStyleBackColor = true;
             this.PreviousWord.Click += new System.EventHandler(this.PreviousWord_Click);
             // 
+            // NotesTextBox
+            // 
+            this.NotesTextBox.Location = new System.Drawing.Point(196, 632);
+            this.NotesTextBox.Name = "NotesTextBox";
+            this.NotesTextBox.Size = new System.Drawing.Size(542, 57);
+            this.NotesTextBox.TabIndex = 12;
+            this.NotesTextBox.Text = "";
+            this.NotesTextBox.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
+            // 
+            // NotesLabel
+            // 
+            this.NotesLabel.Location = new System.Drawing.Point(20, 632);
+            this.NotesLabel.Name = "NotesLabel";
+            this.NotesLabel.ReadOnly = true;
+            this.NotesLabel.Size = new System.Drawing.Size(152, 57);
+            this.NotesLabel.TabIndex = 23;
+            this.NotesLabel.TabStop = false;
+            this.NotesLabel.Text = "Notes";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 643);
+            this.ClientSize = new System.Drawing.Size(766, 727);
+            this.Controls.Add(this.NotesLabel);
+            this.Controls.Add(this.NotesTextBox);
             this.Controls.Add(this.PreviousWord);
             this.Controls.Add(this.NextWord);
             this.Controls.Add(this.LoadJsonFile);
             this.Controls.Add(this.SaveWord);
-            this.Controls.Add(this.IndexLabel);
-            this.Controls.Add(this.IndexTextBox);
+            this.Controls.Add(this.PriorityLabel);
+            this.Controls.Add(this.PriorityTextBox);
             this.Controls.Add(this.ActiveLabel);
             this.Controls.Add(this.ActiveTextBox);
             this.Controls.Add(this.UsedCountLabel);
@@ -290,7 +313,7 @@
             this.Controls.Add(this.WordTextBox);
             this.Controls.Add(this.CreateNewWord);
             this.Name = "Form1";
-            this.Text = "JSON Word Creator v1.0";
+            this.Text = "JSON Word Creator v1.01";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
@@ -306,9 +329,9 @@
         private System.Windows.Forms.RichTextBox ActivationDateTextBox;
         private System.Windows.Forms.RichTextBox UsedCountTextBox;
         private System.Windows.Forms.RichTextBox ActiveTextBox;
-        private System.Windows.Forms.RichTextBox IndexTextBox;
+        private System.Windows.Forms.RichTextBox PriorityTextBox;
         private System.Windows.Forms.Button SaveWord;
-        private System.Windows.Forms.RichTextBox IndexLabel;
+        private System.Windows.Forms.RichTextBox PriorityLabel;
         private System.Windows.Forms.RichTextBox ActiveLabel;
         private System.Windows.Forms.RichTextBox UsedCountLabel;
         private System.Windows.Forms.RichTextBox ActivationDateLabel;
@@ -319,6 +342,8 @@
         private System.Windows.Forms.Button LoadJsonFile;
         private System.Windows.Forms.Button NextWord;
         private System.Windows.Forms.Button PreviousWord;
+        private System.Windows.Forms.RichTextBox NotesTextBox;
+        private System.Windows.Forms.RichTextBox NotesLabel;
     }
 }
 

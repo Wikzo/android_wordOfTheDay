@@ -72,9 +72,13 @@ public class JsonFileManager
             if (jsonobject.has(Word.JsonActive))
                 active = jsonobject.getBoolean(Word.JsonActive);
 
-            int index = i;
-            if (jsonobject.has(Word.JsonIndex))
-                index = jsonobject.getInt(Word.JsonIndex);
+            int priority = i;
+            if (jsonobject.has(Word.JsonPriority))
+                priority = jsonobject.getInt(Word.JsonPriority);
+
+            String notes = "";
+            if (jsonobject.has(Word.JsonNotes))
+                addedDate = jsonobject.getString(Word.JsonNotes);
 
 
             Word newWord = new Word(
@@ -85,7 +89,8 @@ public class JsonFileManager
                     activationDate,
                     usedCount,
                     active,
-                    i);
+                    i,
+                    notes);
 
             words.add(newWord);
         }

@@ -23,7 +23,8 @@ public class Word
     public static final String JsonActivationDate = "activationDate";
     public static final String JsonUsedCount = "usedCount";
     public static final String JsonActive = "active";
-    public static final String JsonIndex = "index";
+    public static final String JsonPriority = "priority";
+    public static final String JsonNotes = "notes";
 
     private String word;
     private String meaning;
@@ -32,7 +33,8 @@ public class Word
     private String activationDate;
     private int usedCount;
     private boolean active;
-    private int index;
+    private int priority;
+    private String notes;
 
     public Word(String word,
                            String meaning,
@@ -40,7 +42,9 @@ public class Word
                            String addedDate,
                            String activationDate,
                            int usedCount,
-                           boolean active, int index)
+                           boolean active,
+                int priority,
+                String notes)
     {
         this.word = word;
         this.meaning = meaning;
@@ -49,7 +53,8 @@ public class Word
         this.activationDate = activationDate;
         this.usedCount = usedCount;
         this.active = active;
-        this.index = index;
+        this.priority = priority;
+        this.notes = notes;
 
 
         // TODO: be able to handle null/empty data!
@@ -96,8 +101,8 @@ public class Word
     {
         if (SelectedWord == null)
         {
-            if (allWordObjects.size() > 0)
-                return allWordObjects.get(0);
+            if (allActiveWordObjects.size() > 0)
+                return allActiveWordObjects.get(0);
             else
             {
                 Log.i("ERROR", "ERROR! No words avilable for selection");
@@ -126,7 +131,7 @@ public class Word
         json.put(JsonActivationDate, this.activationDate);
         json.put(JsonUsedCount, this.usedCount);
         json.put(JsonActive, this.active);
-        json.put(JsonIndex, this.index);
+        json.put(JsonPriority, this.priority);
 
         return json;
     }
@@ -237,13 +242,13 @@ public class Word
         this.active = active;
     }
 
-    public int getIndex()
+    public int getPriority()
     {
-        return index;
+        return priority;
     }
 
-    public void setIndex(int index)
+    public void setPriority(int priority)
     {
-        this.index = index;
+        this.priority = priority;
     }
 }

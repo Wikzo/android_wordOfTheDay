@@ -57,7 +57,7 @@ public class EditWord extends AppCompatActivity
             activationDateTextView.setText(selectedWord.getActivationDate());
             useCountTextView.setText(Integer.toString(selectedWord.getUsedCount()));
             activeTextView.setChecked(selectedWord.getActive());
-            indexTextView.setText(String.valueOf(selectedWord.getIndex()));
+            indexTextView.setText(String.valueOf(selectedWord.getPriority()));
         }
     }
 
@@ -74,7 +74,7 @@ public class EditWord extends AppCompatActivity
             selectedWord.setActivationDate(activationDateTextView.getText().toString());
             selectedWord.setUsedCount(Integer.parseInt(useCountTextView.getText().toString()));
             selectedWord.setActive(activeTextView.isChecked());
-            selectedWord.setIndex(Integer.parseInt(indexTextView.getText().toString()));
+            selectedWord.setPriority(Integer.parseInt(indexTextView.getText().toString()));
         }
 
         Word.SaveAllWords();
